@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-
+import os
 app = Flask(__name__)
 app.secret_key = "anneke"  # Replace with your own secret key, needed for session management
 
@@ -113,7 +113,7 @@ def index():
         beta0 = float(request.form["beta0"])
         beta1 = float(request.form["beta1"])
         S = int(request.form["S"])
-
+    
         # Generate data and initial plots
         (
             X,
@@ -131,18 +131,19 @@ def index():
         # Store data in session
         session["X"] = X.tolist()
         session["Y"] = Y.tolist()
-        session["slope"] = slope
-        session["intercept"] = intercept
-        session["slopes"] = slopes
+        session["slope"] = slope 
+        session["intercept"] = intercept 
+        session["slopes"] = slopes 
         session["intercepts"] = intercepts
         session["slope_extreme"] = slope_extreme
         session["intercept_extreme"] = intercept_extreme
-        session["N"] = N
+        session["N"] = N 
         session["mu"] = mu
         session["sigma2"] = sigma2
-        session["beta0"] = beta0
-        session["beta1"] = beta1
-        session["S"] = S
+        session["beta0"] = beta0 
+        session["beta1"] = beta1 
+        session["S"] = S 
+
 
         # Return render_template with variables
         return render_template(
@@ -166,6 +167,18 @@ def generate():
     # This route handles data generation (same as above)
     return index()
 
+from flask import session, request, jsonify
+@app.route("/check_session")
+def check_session():
+    # Collect all relevant session keys for debugging
+    session_data = {
+        key: session.get(key) for key in [
+            "N", "mu", "sigma2", "beta0", "beta1", "S", 
+            "X", "Y", "slope", "intercept", "slopes", 
+            "intercepts", "slope_extreme", "intercept_extreme"
+        ]
+    }
+    return jsonify(session_data)
 
 @app.route("/hypothesis_test", methods=["POST"])
 def hypothesis_test():
@@ -178,6 +191,7 @@ def hypothesis_test():
     intercepts = session.get("intercepts")
     beta0 = float(session.get("beta0"))
     beta1 = float(session.get("beta1"))
+
 
     parameter = request.form.get("parameter")
     test_type = request.form.get("test_type")
@@ -205,7 +219,7 @@ def hypothesis_test():
         p_value = np.mean(simulated_stats <= observed_stat)
 
     # TODO 11: If p_value is very small (e.g., <= 0.0001), set fun_message to a fun message
-    fun_message = "Wow that is tiny" if p_value <= 0.0001 else "unimpressive p_value"
+    fun_message = "Wow that is tiny" if p_value <= 0.0001 else "Not so tiny"
 
     # TODO 12: Plot histogram of simulated statistics
     plt.figure(figsize=(10, 5))
