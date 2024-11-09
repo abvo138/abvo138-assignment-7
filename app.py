@@ -320,11 +320,12 @@ def confidence_interval():
     plt.plot(estimates, np.zeros_like(estimates), 'o', color='gray', alpha=0.5, label='Individual Estimates')
 
     # Plot the mean estimate as a colored point, with color depending on whether it includes the true parameter
-    mean_color = 'green' if ci_lower <= true_param <= ci_upper else 'red'
-    plt.plot(mean_estimate, 0, 'o', color=mean_color, label='Mean Estimate')
+    mean_color = 'lawngreen' if ci_lower <= true_param <= ci_upper else 'red'
+    plt.plot(mean_estimate, 0, 'o', markersize = 15, color=mean_color, label='Mean Estimate')
 
     # Plot the confidence interval as a horizontal line
-    plt.hlines(0, ci_lower, ci_upper, color='blue', linewidth=2, label='Confidence Interval')
+    confidence_label = f"{int(confidence_level)}% Confidence Interval"
+    plt.hlines(0, ci_lower, ci_upper, color='blue', linewidth=6, label=confidence_label)
 
     # Plot the true parameter value as a dotted green line
     parameter_label = f"True {parameter.capitalize()} Value"
