@@ -291,11 +291,11 @@ def confidence_interval():
     # Use the t-distribution and confidence_level
     # Calculate the t-score for the desired confidence level
     # Approximate z-score based on confidence level
-    if confidence_level == 0.90:
+    if confidence_level == 90:
         approx_z_score = 1.645
-    elif confidence_level == 0.95:
+    elif confidence_level == 95:
         approx_z_score = 1.96
-    elif confidence_level == 0.99:
+    elif confidence_level == 99:
         approx_z_score = 2.576
 
     # Calculate the margin of error
@@ -326,13 +326,14 @@ def confidence_interval():
     # Plot the confidence interval as a horizontal line
     plt.hlines(0, ci_lower, ci_upper, color='blue', linewidth=2, label='Confidence Interval')
 
-    # Plot the true parameter value
-    plt.plot(true_param, 0, 'x', color='black', markersize=10, label='True Parameter Value')
+    # Plot the true parameter value as a dotted green line
+    parameter_label = f"True {parameter.capitalize()} Value"
+    plt.axvline(true_param, color='green', linestyle='--', linewidth=2, label=parameter_label)
 
     # Adding labels and legend
     plt.xlabel("Estimate Value")
     plt.yticks([])  # Hide y-axis ticks since we are just plotting points on a line
-    plt.title(f"{int(confidence_level * 100)}% Confidence Interval for {parameter.capitalize()}")
+    plt.title(f"{int(confidence_level)}% Confidence Interval for {parameter.capitalize()}")
     plt.legend()
 
     # Save the plot
